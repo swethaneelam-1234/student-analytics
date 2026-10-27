@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% block title %}Student Analytics Dashboard{% endblock %}
+{% block content %}
+<section class="welcome-row"><div><h2>Overview</h2><p>Understand student performance at a glance.</p></div><span class="demo-tag">● SAMPLE DATA</span></section>
+<form class="filters" method="get" action="/">
+  <label>Department<select name="department"><option value="">All departments</option>{% for department in departments %}<option value="{{ department }}" {% if selected_department == department %}selected{% endif %}>{{ department }}</option>{% endfor %}</select></label>
+  <label>Semester<select name="semester"><option value="">All semesters</option>{% for semester in semesters %}<option value="{{ semester }}" {% if selected_semester|string == semester|string %}selected{% endif %}>Semester {{ semester }}</option>{% endfor %}</select></label>
+  <label class="search-label">Search student<input type="search" name="search" value="{{ search }}" placeholder="Name or student ID"></label>
+  <button type="submit" class="filter-btn">Apply filters</button><a class="reset-link" href="/">Reset</a>
+</form>
+<section class="kpi-grid">
+  <article class="kpi-card"><div class="kpi-top"><span>Total students</span><span class="kpi-icon violet">♙</span></div><strong>{{ count }}</strong><small>Students in current view</small></article>
+  <article class="kpi-card"><div class="kpi-top"><span>Average marks</span><span class="kpi-icon blue">▥</span></div><strong>{{ avg_marks }}<em>/100</em></strong><small>Across three subjects</small></article>
+  <article class="kpi-card"><div class="kpi-top"><span>Average attendance</span><span class="kpi-icon green">◷</span></div><strong>{{ avg_attendance }}<em>%</em></strong><small>Attendance in current view</small></article>
+  <article class="kpi-card"><div class="kpi-top"><span>Pass rate</span><span class="kpi-icon orange">✓</span></div><strong>{{ pass_rate }}<em>%</em></strong><small>Average marks ≥ 40</small></article>
+</section>
+<section class="charts-grid" id="reports">
+  <article class="panel chart-panel"><div class="panel-heading"><div><h3>Subject performance</h3><p>Average marks by subject</p></div><span class="panel-menu">•••</span></div><div class="chart-holder"><canvas id="subjectChart"></canvas></div></article>
+  <article class="panel chart-panel"><div class="panel-heading"><div><h3>Performance distribution</h3><p>Students grouped by average marks</p></div><span class="panel-menu">•••</span></div><div class="donut-wrap"><div class="chart-holder donut-holder"><canvas id="gradeChart"></canvas></div><div class="chart-legend"><div><i class="legend-dot dot-violet"></i> Excellent <b>{{ chart_data.gradeCounts[0] }}</b></div><div><i class="legend-dot dot-blue"></i> Good <b>{{ chart_data.gradeCounts[1] }}</b></div><div><i class="legend-dot dot-orange"></i> Average <b>{{ chart_data.gradeCounts[2] }}</b></div><div><i class="legend-dot dot-red"></i> Needs support <b>{{ chart_data.gradeCounts[3] }}</b></div></div></div></article>
+</section>
+<section class="panel attendance-panel"><div class="panel-heading"><div><h3>Attendance snapshot</h3><p>Attendance percentage for the first 10 students in this view</p></div></div><div class="attendance-chart"><canvas id="attendanceChart"></canvas></div></section>
+<section class="panel student-panel" id="students"><div class="panel-heading table-heading"><div><h3>Student records</h3><p>Search and filter the student list above</p></div><span class="count-pill">{{ count }} records</span></div><div class="table-wrap"><table><thead><tr><th>Student</th><th>Department</th><th>Semester</th><th>Attendance</th><th>Maths</th><th>Science</th><th>Programming</th><th>Average</th><th>Status</th></tr></thead><tbody>
+{% for student in students %}<tr><td><div class="student-name"><span class="student-avatar avatar-{{ loop.index0 % 5 }}">{{ student.student_name.split()[0][0] }}{{ student.student_name.split()[-1][0] }}</span><div><strong>{{ student.student_name }}</strong><small>{{ student.student_id }}</small></div></div></td><td>{{ student.department }}</td><td>{{ student.semester }}</td><td><div class="attendance-cell"><span>{{ student.attendance }}%</span><div class="mini-track"><i style="width:{{ student.attendance }}%"></i></div></div></td><td>{{ student.math_marks }}</td><td>{{ student.science_marks }}</td><td>{{ student.programming_marks }}</td><td><strong>{{ student.average }}</strong></td><td><span class="status {{ 'pass' if student.average >= 40 else 'support' }}">{{ student.status }}</span></td></tr>
+{% else %}<tr><td colspan="9" class="no-results">No students match these filters. Try resetting the filters.</td></tr>{% endfor %}
+</tbody></table></div></section>
+<div class="note"><strong>Note:</strong> This project uses fictional sample student records. The pass threshold and charts are for demonstration; adjust them to match your institution's grading policy.</div>
+{% endblock %}
+{% block scripts %}
+<script>
+const chartData = {{ chart_data|tojson }};
+Chart.defaults.font.family = "'DM Sans', sans-serif";
+Chart.defaults.color = '#778398';
+new Chart(document.getElementById('subjectChart'), {type:'bar',data:{labels:chartData.subjects,datasets:[{data:chartData.subjectAverages,backgroundColor:['#7667e8','#4c91e8','#35ad8a'],borderRadius:7,barThickness:34}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,max:100,grid:{color:'#eef0f5'},ticks:{stepSize:20}},x:{grid:{display:false}}}}});
+new Chart(document.getElementById('gradeChart'), {type:'doughnut',data:{labels:chartData.gradeLabels,datasets:[{data:chartData.gradeCounts,backgroundColor:['#7667e8','#4c91e8','#f0a24c','#e16d73'],borderWidth:0,hoverOffset:5}]},options:{responsive:true,maintainAspectRatio:false,cutout:'70%',plugins:{legend:{display:false}}}});
+new Chart(document.getElementById('attendanceChart'), {type:'line',data:{labels:chartData.attendanceLabels,datasets:[{label:'Attendance %',data:chartData.attendanceValues,borderColor:'#4c91e8',backgroundColor:'rgba(76,145,232,.12)',fill:true,tension:.35,pointRadius:3,pointBackgroundColor:'#4c91e8'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,max:100,grid:{color:'#eef0f5'}},x:{grid:{display:false}}}}});
+</script>
+{% endblock %}

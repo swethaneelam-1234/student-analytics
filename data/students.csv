@@ -1,0 +1,25 @@
+student_id,student_name,department,semester,attendance,math_marks,science_marks,programming_marks
+STU001,Aarav Sharma,Information Technology,6,94,88,82,96
+STU002,Diya Reddy,Computer Science,6,91,78,86,92
+STU003,Arjun Kumar,Information Technology,5,76,67,73,81
+STU004,Ananya Rao,Computer Science,6,98,94,91,97
+STU005,Vihaan Patel,Electronics,5,82,71,79,68
+STU006,Isha Verma,Information Technology,6,63,52,61,74
+STU007,Kabir Singh,Electronics,4,88,85,77,80
+STU008,Meera Nair,Computer Science,5,96,89,93,95
+STU009,Rohan Das,Information Technology,4,58,43,49,54
+STU010,Saanvi Gupta,Electronics,6,72,66,70,63
+STU011,Aditya Joshi,Computer Science,4,85,81,76,88
+STU012,Anika Iyer,Information Technology,5,89,92,84,90
+STU013,Reyansh Shah,Electronics,5,61,48,57,62
+STU014,Tara Menon,Computer Science,6,93,86,89,91
+STU015,Krish Bhat,Information Technology,4,54,39,45,48
+STU016,Myra Kulkarni,Electronics,6,80,74,82,77
+STU017,Ayaan Kapoor,Computer Science,5,97,91,95,98
+STU018,Navya Shetty,Information Technology,6,69,58,64,72
+STU019,Dev Malhotra,Electronics,4,74,62,68,71
+STU020,Pari Choudhary,Computer Science,5,87,79,84,90
+STU021,Neil Fernandes,Information Technology,5,42,35,41,39
+STU022,Kiara Sethi,Electronics,4,92,88,86,83
+STU023,Manav Pillai,Computer Science,6,78,71,75,80
+STU024,Aadhya Bose,Information Technology,4,99,96,94,98

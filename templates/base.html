@@ -1,0 +1,25 @@
+source .venv/bin/activate<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Student Analytics{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <aside class="sidebar">
+    <a class="brand" href="/"><span class="brand-icon">S</span><span>student<span class="brand-light">insights</span></span></a>
+    <p class="nav-label">WORKSPACE</p>
+    <a class="nav-item active" href="/"><span>▦</span> Dashboard</a>
+    <a class="nav-item" href="#students"><span>♙</span> Students</a>
+    <a class="nav-item" href="#reports"><span>▤</span> Reports</a>
+    <div class="sidebar-bottom"><div class="avatar">SA</div><div><strong>Student Analytics</strong><small>Academic overview</small></div></div>
+  </aside>
+  <main class="main-content">
+    <header class="topbar"><div><span class="top-kicker">ACADEMIC PERFORMANCE</span><h1>Student Analytics Dashboard</h1></div><a class="export-btn" href="{{ url_for('export_csv', department=selected_department, semester=selected_semester, search=search) }}">↓ Export CSV</a></header>
+    {% block content %}{% endblock %}
+    <footer>Student Analytics · Demo dashboard using sample academic records</footer>
+  </main>
+  {% block scripts %}{% endblock %}
+</body>
+</html>
